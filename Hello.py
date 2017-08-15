@@ -1,9 +1,9 @@
 # @Author: karthick
 # @Date:   2017-08-15T14:54:29+02:00
 # @Last modified by:   karthick
-# @Last modified time: 2017-08-15T16:22:58+02:00
+# @Last modified time: 2017-08-15T16:39:29+02:00
 
-from flask import Flask
+from flask import Flask, redirect, url_for
 app = Flask(__name__)
 
 #route() function is a decorator that tells the application which URL should call the associated function
@@ -23,7 +23,20 @@ def hello_flask():
 def hello_python():
    return 'Hello Python'
 
+@app.route('/admin')
+def hello_admin():
+    return 'Hello Admin'
 
+@app.route('/guest/<guest>')
+def hello_guest(guest):
+    return 'Hello %s as Guest' % guest
+
+@app.route('/user/<name>')
+def hello_user(name):
+    if name =='admin':
+        return redirect(url_for('hello_admin'))
+    else:
+        return redirect(url_for('hello_guest', guest=name))
 
 if __name__=="__main__":
     app.run(debug=True) # when debug is enabled, the server will reload itself if the code changes
